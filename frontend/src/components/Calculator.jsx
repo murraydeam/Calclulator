@@ -16,10 +16,10 @@ export function reducer(state, { type, payload }) {
     case ACTIONS.ADD_DIGIT:
       if (state.overwrite) {
         return {
-          ...state, 
-        currentOperand: payload.digit,
-        overwrite: false
-        }
+          ...state,
+          currentOperand: payload.digit,
+          overwrite: false,
+        };
       }
       if (payload.digit === "0" && state.currentOperand === "0") return state;
       if (payload.digit === "." && state.currentOperand.includes("."))
@@ -35,33 +35,33 @@ export function reducer(state, { type, payload }) {
         return {
           ...state,
           overwrite: false,
-          currentOperand: null
-        }
+          currentOperand: null,
+        };
       }
-      if (state.currentOperand == null) return state
+      if (state.currentOperand == null) return state;
       if (state.currentOperand.length === 1) {
-        return { ...state, currentOperand: null }
+        return { ...state, currentOperand: null };
       }
       return {
         ...state,
-        currentOperand: state.currentOperand.slice(0, -1)
-      }
+        currentOperand: state.currentOperand.slice(0, -1),
+      };
     case ACTIONS.EVALUATE:
       if (
         state.operation == null ||
         state.currentOperand == null ||
         state.previousOperand == null
       ) {
-        return state
+        return state;
       }
 
       return {
         ...state,
         overwrite: true,
-        previousOperand: null, 
+        previousOperand: null,
         operation: null,
         currentOperand: evaluate(state),
-      }
+      };
 
     case ACTIONS.CHOOSE_OPERATION:
       if (state.currentOperand == null && state.previousOperand == null) {
@@ -69,9 +69,9 @@ export function reducer(state, { type, payload }) {
       }
       if (state.currentOperand == null) {
         return {
-          ...state, 
-          operation: payload.operation
-        }
+          ...state,
+          operation: payload.operation,
+        };
       }
       if (state.previousOperand == null) {
         return {
@@ -113,12 +113,12 @@ function evaluate({ currentOperand, previousOperand, operation }) {
 
 const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
   maximumFractionDigits: 0,
-})
+});
 function formatOperand(operand) {
-  if (operand == null) return 
-  const [integer, decimal] = operand.split('.')
-  if (decimal == null) return INTEGER_FORMATTER.format(integer)
-  return `${INTEGER_FORMATTER.format(integer)}.${decimal}`
+  if (operand == null) return;
+  const [integer, decimal] = operand.split(".");
+  if (decimal == null) return INTEGER_FORMATTER.format(integer);
+  return `${INTEGER_FORMATTER.format(integer)}.${decimal}`;
 }
 export const Calculator = () => {
   const [{ currentOperand, previousOperand, operation }, dispatch] = useReducer(
@@ -142,7 +142,9 @@ export const Calculator = () => {
       >
         AC
       </button>
-      <button onClick={() => dispatch({ type: ACTIONS.DELETE_DIGIT })}>DEL</button>
+      <button onClick={() => dispatch({ type: ACTIONS.DELETE_DIGIT })}>
+        DEL
+      </button>
       <OperationButton operation="÷" dispatch={dispatch} />
       <DigitButton digit="1" dispatch={dispatch} />
       <DigitButton digit="2" dispatch={dispatch} />
@@ -158,7 +160,12 @@ export const Calculator = () => {
       <OperationButton operation="-" dispatch={dispatch} />
       <DigitButton digit="." dispatch={dispatch} />
       <DigitButton digit="0" dispatch={dispatch} />
-      <button className="span-two"onClick={() => dispatch({ type: ACTIONS.EVALUATE })}>=</button>
+      <button
+        className="span-two"
+        onClick={() => dispatch({ type: ACTIONS.EVALUATE })}
+      >
+        =
+      </button>
     </div>
   );
 };
