@@ -1,5 +1,4 @@
 import { ACTIONS } from "./Calculator";
-import DigitButton from "./DigitButton";
 
 const OperationButton = ({ dispatch, operation}) => {
   return (
